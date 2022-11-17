@@ -57,8 +57,12 @@ function fibonacci(n) {
  * console.log(sumFn(3)) - 18
  */
 function getOperationFn(initialValue, operatorFn) {
-    return function (n) {
-        if (typeof operatorFn === 'function') initialValue = operatorFn(initialValue, n);
+    return (typeof operatorFn === 'function') ?
+    function (n) {
+        initialValue = operatorFn(initialValue, n);
+        return initialValue;
+    } :
+    function () {
         return initialValue;
     }
 }
@@ -102,14 +106,20 @@ function sequence(start=0, step=1) {
  * deepEqual({arr: [22, 33], text: 'text'}, {arr: [22, 3], text: 'text2'}) // false
  */
 function deepEqual(firstObject, secondObject) {
-    if((firstObject === secondObject) || 
-    (firstObject !== firstObject && secondObject !== secondObject)) return true;
+    if ((firstObject === secondObject) || 
+    (firstObject !== firstObject && secondObject !== secondObject)) {
+        return true;
+    }
     else if (firstObject && secondObject && typeof firstObject === 'object' && typeof secondObject === 'object') {
-        if(Object.keys(firstObject).length !== Object.keys(secondObject).length) return false;
-        
+        if(Object.keys(firstObject).length !== Object.keys(secondObject).length) {
+            return false;
+        }
+
         for (let x in firstObject) {
             if(!secondObject.hasOwnProperty(x) || 
-            !deepEqual(firstObject[x], secondObject[x])) return false;
+            !deepEqual(firstObject[x], secondObject[x])) {
+                return false;
+            }
         }
         return true;
     }
